@@ -19,7 +19,6 @@ final class SupremeLeader
 	extends PlayerImpl
 {
 	/* The randomizer used to generate random price */
-	private final Random m_randomizer = new Random(System.currentTimeMillis());
 
 	private SupremeLeader()
 		throws RemoteException, NotBoundException
@@ -48,8 +47,8 @@ final class SupremeLeader
 
 		for(int i=1;i<101;i++)
 		{
-			Record newRecord = m_platformStub.query(m_type, i);
-
+			Record newRecord = m_platformStub.query(m_type, p_date-i);
+			System.out.println(p_date-i);
 			u_leader[i-1] = newRecord.m_leaderPrice;
 			u_follower[i-1] = newRecord.m_followerPrice;
 		}
@@ -116,17 +115,6 @@ final class SupremeLeader
 		return numerator / denominator;
 	}
 
-	/**
-	 * Generate a random price based Gaussian distribution. The mean is p_mean,
-	 * and the diversity is p_diversity
-	 * @param p_mean The mean of the Gaussian distribution
-	 * @param p_diversity The diversity of the Gaussian distribution
-	 * @return The generated price
-	 */
-	private float genPrice(final float p_mean, final float p_diversity)
-	{
-		return (float) (p_mean + m_randomizer.nextGaussian() * p_diversity);
-	}
 
 	public static void main(final String[] p_args)
 		throws RemoteException, NotBoundException

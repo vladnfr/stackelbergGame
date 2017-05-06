@@ -11,16 +11,16 @@ import java.util.TimerTask;
  * A very simple leader implementation that only generates random prices
  * @author Xin
  */
-final class SimpleLeader
+final class SupremeLeader
 	extends PlayerImpl
 {
 	/* The randomizer used to generate random price */
 	private final Random m_randomizer = new Random(System.currentTimeMillis());
 
-	private SimpleLeader()
+	private SupremeLeader()
 		throws RemoteException, NotBoundException
 	{
-		super(PlayerType.LEADER, "Simple Leader");
+		super(PlayerType.LEADER, "Supreme Leader");
 	}
 
 	@Override
@@ -58,7 +58,7 @@ final class SimpleLeader
 	public static void main(final String[] p_args)
 		throws RemoteException, NotBoundException
 	{
-		new SimpleLeader();
+		new SupremeLeader();
 	}
 
 	/**

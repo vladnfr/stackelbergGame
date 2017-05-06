@@ -6,6 +6,8 @@ import java.rmi.RemoteException;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * A very simple leader implementation that only generates random prices
@@ -39,8 +41,21 @@ final class SupremeLeader
 	public void proceedNewDay(int p_date)
 		throws RemoteException
 	{
-		Record newRecord = m_platformStub.query(m_type, 1);
-		System.out.println(newRecord.m_leaderPrice);
+		float[] u_leader = new float[100];
+		float[] u_follower = new float[100];
+
+		for(int i=1;i<101;i++)
+		{
+			Record newRecord = m_platformStub.query(m_type, i);
+
+			u_leader[i-1] = newRecord.m_leaderPrice;
+			u_follower[i-1] = newRecord.m_followerPrice;
+		}
+
+		
+
+		m_platformStub.publishPrice(m_type, genPrice(1.8f, 0.05f));
+		
 	}
 
 	/**

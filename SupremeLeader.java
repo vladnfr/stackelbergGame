@@ -94,6 +94,10 @@ final class SupremeLeader
 		return sum;
 	}
 
+	private float computeDenominator(short noOfDays, float t1, float t4)
+	{
+		return  noOfDays * t1 - (float)Math.pow(t4, 2); 
+	}
 	/**
 	 * Generate a random price based Gaussian distribution. The mean is p_mean,
 	 * and the diversity is p_diversity

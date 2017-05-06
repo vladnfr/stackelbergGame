@@ -83,6 +83,17 @@ final class SupremeLeader
 		return sum;
 	}
 
+	private float sumOfProducts(float [] leaderPrices, float [] followerPrices)
+	{
+		float sum = 0;
+		for(short i = 0; i < leaderPrices.length; i++)
+		{
+			sum += leaderPrices[i]*followerPrices[i];
+		}
+
+		return sum;
+	}
+
 	/**
 	 * Generate a random price based Gaussian distribution. The mean is p_mean,
 	 * and the diversity is p_diversity

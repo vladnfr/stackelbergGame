@@ -8,6 +8,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.List;
 import java.util.ArrayList;
+import java.lang.IndexOutOfBoundsException;
+import java.lang.Math;
 
 /**
  * A very simple leader implementation that only generates random prices
@@ -52,10 +54,33 @@ final class SupremeLeader
 			u_follower[i-1] = newRecord.m_followerPrice;
 		}
 
-		
+		float [] test = {1.0f, 2.0f, 3.0f};
+		System.out.println(sumOfSquares(test));
 
 		m_platformStub.publishPrice(m_type, genPrice(1.8f, 0.05f));
-		
+
+	}
+
+	private float sumOfSquares(float [] array) throws IndexOutOfBoundsException
+	{
+		float sum = 0;
+		for (short i = 0; i < array.length; i++)
+		{
+			sum += Math.pow(array[i], 2);
+		}
+
+		return sum;
+	}
+
+	private float sum(float [] array) throws IndexOutOfBoundsException
+	{
+		float sum = 0;
+		for (short i = 0; i < array.length; i++)
+		{
+			sum += array[i];
+		}
+
+		return sum;
 	}
 
 	/**
@@ -87,7 +112,7 @@ final class SupremeLeader
 		{
 			(new Timer()).schedule(new ExitTask(), p_delay);
 		}
-		
+
 		@Override
 		public void run()
 		{

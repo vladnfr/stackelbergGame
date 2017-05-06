@@ -56,7 +56,7 @@ final class SupremeLeader
 		m_platformStub.publishPrice(m_type, computePrice(u_leader, u_follower));
 	}
 
-	private float sumOfSquares(float [] array) throws IndexOutOfBoundsException
+	private float sumOfSquares(float[] array) throws IndexOutOfBoundsException
 	{
 		float sum = 0;
 		for (short i = 0; i < array.length; i++)
@@ -67,7 +67,7 @@ final class SupremeLeader
 		return sum;
 	}
 
-	private float sum(float [] array) throws IndexOutOfBoundsException
+	private float sum(float[] array) throws IndexOutOfBoundsException
 	{
 		float sum = 0;
 		for (short i = 0; i < array.length; i++)
@@ -78,7 +78,7 @@ final class SupremeLeader
 		return sum;
 	}
 
-	private float sumOfProducts(float [] leaderPrices, float [] followerPrices)
+	private float sumOfProducts(float[] leaderPrices, float[] followerPrices)
 	{
 		float sum = 0;
 		for(short i = 0; i < leaderPrices.length; i++)

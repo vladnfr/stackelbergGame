@@ -54,11 +54,7 @@ final class SupremeLeader
 			u_follower[i-1] = newRecord.m_followerPrice;
 		}
 
-		float [] test = {1.0f, 2.0f, 3.0f};
-		System.out.println(sumOfSquares(test));
-
-		m_platformStub.publishPrice(m_type, genPrice(1.8f, 0.05f));
-
+		m_platformStub.publishPrice(m_type, computePrice(u_leader, u_follower));
 	}
 
 	private float sumOfSquares(float [] array) throws IndexOutOfBoundsException
@@ -96,8 +92,30 @@ final class SupremeLeader
 
 	private float computeDenominator(short noOfDays, float t1, float t4)
 	{
-		return  noOfDays * t1 - (float)Math.pow(t4, 2); 
+		return  noOfDays * t1 - (float)Math.pow(t4, 2);
 	}
+
+	private float computePrice(float[] leaderHistory, float[] followerHistory)
+	{
+		float t1, t2, t3, t4, t5;
+		short noOfDays = (short) leaderHistory.length;
+		t1 = sumOfSquares(leaderHistory);
+		t2 = sumOfProducts(leaderHistory, followerHistory);
+		t3 = sum(followerHistory);
+		t4 = sum(leaderHistory);
+		t5 = computeDenominator(noOfDays, t1, t4);
+
+		float a, b;
+		a = (t1 * t3 - t4 * t2) / t5;
+		b = (noOfDays * t2 - t3 * t4) / t5;
+
+		float numerator, denominator;
+		numerator = 2 + 0.3f * a + 1;
+		denominator = 2.0f * (1 - 0.15f * b);
+
+		return numerator / denominator;
+	}
+
 	/**
 	 * Generate a random price based Gaussian distribution. The mean is p_mean,
 	 * and the diversity is p_diversity

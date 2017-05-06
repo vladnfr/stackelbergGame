@@ -1,5 +1,6 @@
-import comp34120.ex2.PlayerImpl;
 import comp34120.ex2.PlayerType;
+import comp34120.ex2.PlayerImpl;
+import comp34120.ex2.Record;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Random;
@@ -19,7 +20,7 @@ final class SimpleLeader
 	private SimpleLeader()
 		throws RemoteException, NotBoundException
 	{
-		super(PlayerType.LEADER, "Simple Leader");
+		super(PlayerType.LEADER, "SupremeLeader13");
 	}
 
 	@Override
@@ -38,7 +39,8 @@ final class SimpleLeader
 	public void proceedNewDay(int p_date)
 		throws RemoteException
 	{
-		m_platformStub.publishPrice(m_type, genPrice(1.8f, 0.05f));
+		Record newRecord = m_platformStub.query(m_type, 1);
+		System.out.println(newRecord.m_leaderPrice);
 	}
 
 	/**

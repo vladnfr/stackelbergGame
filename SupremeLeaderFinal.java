@@ -110,6 +110,8 @@ final class SupremeLeader
 		a = (t1 * t3 - t4 * t2) / t5;
 		b = (noOfDays * t2 - t3 * t4) / t5;
 
+
+
 		float numerator, denominator;
 		numerator = 2 + 0.3f * a + 1 - 0.3f * b;
 		denominator = 2.0f * (1 - 0.3f * b);

@@ -19,6 +19,7 @@ final class SupremeLeader
 	extends PlayerImpl
 {
 	/* The randomizer used to generate random price */
+	private final Random m_randomizer = new Random(System.currentTimeMillis());
 
 	private SupremeLeader()
 		throws RemoteException, NotBoundException
@@ -55,7 +56,96 @@ final class SupremeLeader
 			u_follower[i-1] = newRecord.m_followerPrice;
 		}
 
-		m_platformStub.publishPrice(m_type, computePrice(u_leader, u_follower));
+		m_platformStub.publishPrice(m_type, computePrice(u_leader,u_follower));
+	}
+
+	private float getA(float[] leaderHistory, float[] followerHistory)
+	{
+		float t1, t2, t3, t4, t5;
+		short noOfDays = (short) leaderHistory.length;
+		t1 = sumOfSquares(leaderHistory);
+		t2 = sumOfProducts(leaderHistory, followerHistory);
+		t3 = sum(followerHistory);
+		t4 = sum(leaderHistory);
+		t5 = computeDenominator(noOfDays, t1, t4);
+		return (t1 * t3 - t4 * t2) / t5;
+	}
+
+	private float getB(float[] leaderHistory, float[] followerHistory)
+	{
+		float t1, t2, t3, t4, t5;
+		short noOfDays = (short) leaderHistory.length;
+		t1 = sumOfSquares(leaderHistory);
+		t2 = sumOfProducts(leaderHistory, followerHistory);
+		t3 = sum(followerHistory);
+		t4 = sum(leaderHistory);
+		t5 = computeDenominator(noOfDays, t1, t4);
+		return (noOfDays * t2 - t3 * t4) / t5;
+	}
+
+	private float getAlpha(float b)
+	{
+		return 0.3f * b - 1;
+	}
+
+	private float getBeta(float a, float b)
+	{
+		return 2 + 0.3f * a + 1 - 0.3f * b;
+	}
+
+	private float getGamma(float a, float noOfDays) 
+	{
+		return noOfDays * (2 + 0.3f * a);
+	}
+
+	private float gradientAscent(float[] leaderHistory, float[] followerHistory, int numberOfDays, float a, float b)
+	{
+		float[] futurePrices = new float[numberOfDays];
+		float[] deltaPrices = new float[numberOfDays];
+
+		for(short i=0; i<numberOfDays; i++)
+		{
+			futurePrices[i] = m_randomizer.nextFloat() * 3;
+		}
+
+		float alpha = getAlpha(b);
+		float beta = getBeta(a, b);
+
+		do
+		{
+			for(short j=0; j<numberOfDays; j++)
+			{
+
+				deltaPrices[j] = 2*alpha*futurePrices[j] + beta;
+				futurePrices[j] = futurePrices[j] + deltaPrices[j];
+				if(futurePrices[j] < 1)
+					futurePrices[j] = 1.2f;
+			}
+
+		} while(mean(deltaPrices) > 1e-20f);
+
+		if(getProfit(futurePrices[0],b*futurePrices[0]+a) < 0.5)
+			return computePrice(leaderHistory,followerHistory);
+
+		return futurePrices[0];
+	}
+
+	private float getProfit(float leaderPrice, float followerPrice)
+	{
+		return (leaderPrice - 1)*(2-leaderPrice+0.3f*followerPrice);
+	}
+
+	private float mean(float[] numberArray)
+	{
+		int sum = 0;
+		
+		for(short i=0; i<numberArray.length; i++)
+		{
+			sum += Math.abs(numberArray[i]);
+		}
+
+		return sum/numberArray.length;
+
 	}
 
 	private float sumOfSquares(float[] array) throws IndexOutOfBoundsException
